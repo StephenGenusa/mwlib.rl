@@ -21,7 +21,8 @@ from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_JUSTIFY, TA_RIGHT
 from reportlab.lib.units import cm
 
 from reportlab.lib import colors
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import letter
+import reportlab.lib.colors
 
 
 # used to mark translateable strings:
@@ -31,6 +32,7 @@ if '_' not in globals():
 
 serif_font =  "FreeSerif"
 sans_font = "FreeSans"
+sans_bold_font = "FreeSansBold"
 mono_font = "FreeMono"
 default_font = 'FreeSerif'
 
@@ -41,7 +43,7 @@ rl_config.canvas_basefontname = default_font
 
 ######### PAGE CONFIGURATION
 
-page_width, page_height = A4   # roughly: pW= 21*cm pH=29*cm
+page_width, page_height = letter
 
 page_margin_left = 2 * cm
 page_margin_right = 2 * cm
@@ -57,7 +59,7 @@ footer_margin_vert= 1.5 * cm
 # margins for title page
 title_margin_left = page_margin_left
 title_margin_right = page_margin_right
-title_margin_top = page_margin_top
+title_margin_top = page_margin_top + 250
 title_margin_bottom = page_margin_bottom
 
 show_title_page = True
@@ -66,7 +68,7 @@ show_page_header = True
 show_page_footer = True
 page_break_after_article = False
 
-show_article_attribution = True   # Show/Hide article source and contributors
+show_article_attribution = False   # Show/Hide article source and contributors
 show_article_hr = True           # Underline each article header by a horizontal rule
 show_wiki_license = True
 
@@ -87,10 +89,10 @@ title_page_image_size = (12*cm, 17*cm) # max. width, height of image, aspect rat
 # It is ensured that the image is not moved out of the page boundaries
 title_page_image_pos = (None, None)
 
-titlepagefooter = _(u'PDF generated using the open source mwlib toolkit. See http://code.pediapress.com/ for more information.')
+titlepagefooter = _(u'')
 
 # toggle display of PDF generation date in title page footer
-show_creation_date = True
+show_creation_date = False
 # date format as defined in http://docs.python.org/2/library/time.html#time.strftime
 creation_date_format = '%a, %d %b %Y %H:%M:%S %Z'
 # displayed text. %s will be substituted by the date string defined above
@@ -279,14 +281,16 @@ def text_style(mode='p', indent_lvl=0, in_table=0, relsize='normal', text_align=
         style.fontSize = 36
         style.leading = 40
         style.spaceBefore = 16
-        style.fontName= sans_font
-        style.alignment = TA_LEFT
+        style.textColor = colors.HexColor('#0000CC')
+        style.fontName= sans_bold_font
+        style.alignment = TA_CENTER
         
     if mode == 'booksubtitle':
-        style.fontSize = 24
+        style.fontSize = 20
         style.leading = 30
+        style.textColor = colors.HexColor('#6666FF')
         style.fontName= sans_font
-        style.alignment = TA_LEFT
+        style.alignment = TA_CENTER
 
     if word_wrap == 'RTL':
         # switch all alignment, indentations for rtl languages
@@ -346,7 +350,7 @@ class BaseHeadingStyle(ParagraphStyle):
         self.bulletFontName = serif_font
         self.bulletFontSize = big_font_size
         self.bulletIndent = 0
-        self.textColor = colors.black
+        self.textColor = colors.HexColor ('#000066') # colors.black
         self.backcolor = None
         self.wordWrap = None
         self.textTransform = None
