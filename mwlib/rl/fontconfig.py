@@ -15,7 +15,8 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase.cidfonts import UnicodeCIDFont
 
 font_paths = [os.path.dirname(mwlib.fonts.__file__),
-              os.path.expanduser('~/mwlibfonts/')
+              os.path.expanduser('~/mwlibfonts/'),
+              os.path.expanduser('/usr/share/fonts/truetype')
               ]
 
 # from the fonts defined below only FreeFont is part of the mwlib packet
