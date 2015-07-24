@@ -420,13 +420,18 @@ class RlWriter(object):
             tocCallback = self.tocCallback
         else:
             tocCallback = None
+        try:
+            pdf_creator=pdfstyles.creator
+        except:
+            pdf_creator="Unknown"
         self.doc = PPDocTemplate(output,
                                  topMargin=pdfstyles.page_margin_top,
                                  leftMargin=pdfstyles.page_margin_left,
                                  rightMargin=pdfstyles.page_margin_right,
                                  bottomMargin=pdfstyles.page_margin_bottom,
                                  title=self.book.title,
-                                 keywords=version,
+                                 keywords=self.book.title,
+                                 creator=pdf_creator,
                                  status_callback=self.render_status,
                                  tocCallback=tocCallback,
         )
@@ -1438,7 +1443,12 @@ class RlWriter(object):
         if not img_path:
             if img_node.target == None:
                 img_node.target = ''
-            log.warning('invalid image url (obj.target: %r)' % img_node.target)
+            if img_node.target.find(':') > -1:
+                img_filename = img_node.target.split(':')[1]
+            else:
+                img_filename = img_node.target
+            if not img_filename in pdfstyles.image_warnings_to_ignore:
+                log.warning('invalid image url (obj.target: %r)' % img_node.target)
             return []
 
         try:
