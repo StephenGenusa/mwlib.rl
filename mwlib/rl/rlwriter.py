@@ -1370,8 +1370,9 @@ class RlWriter(object):
             log.warning('image can not be opened by PIL: %r' % img_path)
             return -1
         if not isinstance(img.info.get('transparency', 0), int):
-            log.warning('image contains invalid transparency info - skipping')
-            return -1
+            img.convert('RGB').save(img_path)
+            log.info('invalid transparency fixed. new image written')
+            return 0
         cmds = []
         base_cmd = [
             'convert',
