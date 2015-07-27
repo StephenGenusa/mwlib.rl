@@ -16,6 +16,7 @@ from reportlab.platypus.tables import Table
 from mwlib.rl import pdfstyles
 from mwlib.rl import fontconfig
 
+import pickle
 
 class TocRenderer(object):
 
@@ -41,6 +42,21 @@ class TocRenderer(object):
         return [pdfstyles.print_width - w - 30, w]
     
     def renderToc(self, tocpath, toc_entries, rtl):
+        log.info("beginning renderToc")
+        # Workaround for failed TOC rendering
+		"""
+        if os.path.isfile('toc.pkl'):
+            _ = self.return_contents
+            pkl_file = open('toc.pkl', 'rb')
+            toc_entries = pickle.load(pkl_file)
+            pkl_file.close()
+            rtl=False
+        else:
+            output = open('toc.pkl', 'wb')
+            pickle.dump(toc_entries, output)
+            output.close()
+		"""
+
         doc = SimpleDocTemplate(tocpath, pagesize=(pdfstyles.page_width, pdfstyles.page_height))
         elements = []
         elements.append(Paragraph(_('Contents'), pdfstyles.heading_style(mode='chapter', text_align='left' if not rtl else 'right')))
@@ -65,6 +81,7 @@ class TocRenderer(object):
         t.setStyle(styles)
         elements.append(t)
         doc.build(elements)
+        log.info("ending renderToc")
 
     def run_cmd(self, cmd):
         try:
@@ -108,3 +125,12 @@ class TocRenderer(object):
         if os.path.exists(tocpath):
             os.unlink(tocpath)
         return retcode
+
+if __name__ == '__main__':
+    # Workaround for failed TOC rendering
+    toc_renderer = TocRenderer()
+    tocpath=os.path.join(os.path.expanduser('~/Documents'), "toc.pdf")
+    pdfpath=tocpath=os.path.join(os.path.expanduser('~/Documents'), "tempA.pdf")
+    finalpath=tocpath=os.path.join(os.path.expanduser('~/Documents'), "Final Product.pdf")
+    toc_renderer.renderToc(tocpath, [], False)
+    toc_renderer.combinePdfs(pdfpath, tocpath, finalpath, True)
