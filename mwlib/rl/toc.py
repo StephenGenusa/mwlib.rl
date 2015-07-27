@@ -41,6 +41,9 @@ class TocRenderer(object):
         # subtracting 30pt below is *probably* necessary b/c of the table margins
         return [pdfstyles.print_width - w - 30, w]
     
+    def return_contents(text, param2):
+        return param2
+		
     def renderToc(self, tocpath, toc_entries, rtl):
         log.info("beginning renderToc")
         # Workaround for failed TOC rendering
