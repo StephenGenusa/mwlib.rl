@@ -1700,7 +1700,18 @@ class RlWriter(object):
             return None
 
     def writeSource(self, n):
-        langMap = {'lisp': lexers.CommonLispLexer()} #custom Mapping between mw-markup source attrs to pygement lexers if get_lexer_by_name fails
+        langMap = {'lisp': lexers.CommonLispLexer(),
+                   'html4strict' : lexers.HtmlLexer(),
+                   'email': lexers.GettextLexer(),
+                   'html5': lexers.HtmlLexer(),
+                   'vb': lexers.GettextLexer(),
+                   'bnf': lexers.GettextLexer(),
+                   'java5': lexers.GettextLexer(),
+                   'ldif': lexers.GettextLexer(),
+                   'pf': lexers.GettextLexer(),
+                   'dos': lexers.GettextLexer(),
+                   'tsql': lexers.GettextLexer(),
+                   'whois': lexers.GettextLexer()} #custom Mapping between mw-markup source attrs to pygement lexers if get_lexer_by_name fails
         def getLexer(name):
             try:
                 return lexers.get_lexer_by_name(name)
