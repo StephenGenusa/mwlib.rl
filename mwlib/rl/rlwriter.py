@@ -1349,10 +1349,12 @@ class RlWriter(object):
             if imgPath:
                 imgPath = imgPath.encode('utf-8')
                 self.tmpImages.add(imgPath)
+            """
             if not self.license_checker.displayImage(target):
                 if self.debug:
                     print 'filtering image', target, self.license_checker.getLicenseDisplayName(target)
                 return None
+            """
         else:
             imgPath = ''
         return imgPath
